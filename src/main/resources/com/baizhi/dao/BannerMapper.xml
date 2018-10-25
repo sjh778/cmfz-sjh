@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	namespace:写当前mapper文件对应的dao接口的全类名
+ -->
+<mapper namespace="com.baizhi.dao.BannerDao">
+
+
+	<!--查询全部-->
+	<select id="getAllBanner" resultType="Banner">
+		select * from banner LIMIT #{start},#{end}
+	</select>
+	<!--查询数量-->
+	<select id="getCount" resultType="int">
+		select count(*) from banner
+	</select>
+
+	<!--修改-->
+	<update id="update">
+		update banner set status=#{status} where id=#{id}
+	</update>
+
+	<!--删除-->
+	<delete id="delete">
+		delete from banner where id=#{id}
+	</delete>
+
+	<!--添加-->
+	<insert id="insert">
+		insert into banner values(0,#{title},#{url},#{desc},NOW(),"Y")
+	</insert>
+</mapper>
