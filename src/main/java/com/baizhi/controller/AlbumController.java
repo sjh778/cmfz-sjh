@@ -1,8 +1,7 @@
 package com.baizhi.controller;
 
-import com.baizhi.entity.Banner;
-import com.baizhi.service.BannerService;
-import org.apache.commons.io.FilenameUtils;
+import com.baizhi.entity.Album;
+import com.baizhi.service.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,48 +11,26 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
+import java.util.List;
 
 /**
- * Created by Administrator on 2018/10/24 0024.
+ * Created by Administrator on 2018/10/25 0025.
  */
 @RestController
-@RequestMapping("/banner")
-public class BannerController {
+@RequestMapping("/album")
+public class AlbumController {
     @Autowired
-    private BannerService service;
+    private AlbumService service;
 
-    @RequestMapping("/getAllBanner")
-    public Map getAllBanner(int page,int rows){
-        return service.getAllBanner(page,rows);
-    }
-
-    @RequestMapping("/update")
-    public boolean update(Banner ban){
-        try {
-            service.update(ban);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-    @RequestMapping("/delete")
-    public boolean delete(int id){
-        try {
-            service.delete(id);
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+    @RequestMapping("/getAlbumTree")
+    public List<Album> getAlbumTree(){
+        return service.getAlbumTree();
     }
 
     @RequestMapping("/add")
-    public boolean add(Banner banner,MultipartFile multipartFile,HttpServletRequest req){
+    public boolean add(Album album, MultipartFile multipartFile, HttpServletRequest req){
         try {
             String realpath = req.getSession().getServletContext().getRealPath("/img");
-            //String realpath = req.getRealPath("/img");
             System.out.println(realpath);
             String oldFileName = multipartFile.getOriginalFilename();
             System.out.println(oldFileName);
@@ -63,16 +40,13 @@ public class BannerController {
             File file = new File(realpath+"/"+filename);
             try {
                 multipartFile.transferTo(file);
-            } catch (IllegalStateException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             String url = "/img/"+filename;
-            banner.setUrl(url);
-            service.add(banner);
+            album.setCoverImg(url);
+            service.add(album);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

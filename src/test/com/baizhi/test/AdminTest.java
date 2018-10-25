@@ -4,6 +4,7 @@ import com.baizhi.CmfzApp;
 import com.baizhi.dao.AdminDao;
 import com.baizhi.entity.Banner;
 import com.baizhi.service.AdminService;
+import com.baizhi.service.AlbumService;
 import com.baizhi.service.BannerService;
 import com.baizhi.service.MenuService;
 import org.junit.Test;
@@ -25,6 +26,8 @@ public class AdminTest {
     MenuService ms;
     @Autowired
     BannerService bs;
+    @Autowired
+    AlbumService as;
     @Test
     public void test(){
         System.out.println(service.login("zhangsan","qwer"));
@@ -44,6 +47,10 @@ public class AdminTest {
         //ban.setDesc("aaa");
         ban.setStatus("N");
         bs.update(ban);
+    }
+    @Test
+    public void test5(){
+        System.out.println(as.getAlbumTree());
     }
 
 }

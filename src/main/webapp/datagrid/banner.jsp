@@ -13,7 +13,7 @@
         $("#dg").edatagrid({
             url: "${pageContext.request.contextPath}/banner/getAllBanner.do",
             updateUrl:"${pageContext.request.contextPath}/banner/update.do",
-            destroyUrl:"${pageContext.request.contextPath}/banner/delete.do",
+            //destroyUrl:"${pageContext.request.contextPath}/banner/delete.do",
             fit: true,
             fitColumns:true,
             columns: [[
@@ -57,9 +57,45 @@
                 iconCls: 'icon-remove',
                 text:"删除",
                 handler: function(){
-                    alert('删除按钮');
-                    $("#dg").edatagrid("destroyRow");
-                    //$("#dg").edatagrid("reload");
+                    //alert('删除按钮');
+                    //获取选中的行
+                    var row =  $("#dg").edatagrid("getSelected");
+                    console.log(row);
+                    if(row == null){
+                        alert("请选择一行");
+                    }else{
+                        console.log(row.id);
+                        $.messager.confirm('确认对话框', '您确定要删除吗？', function(r){
+                            if (r){
+                                //删除操作;
+                                $.ajax({
+                                    url:"${pageContext.request.contextPath}/banner/delete.do",
+                                    data:{"id":row.id},
+                                    type:"post",
+                                    //防止jQuery对json格式的数据做深度序列化==》告诉jQuery别做处理
+                                    //traditional:true,
+                                    success:function(data){
+                                        if(data){
+                                            $.messager.show({
+                                                title:"删除提示",
+                                                showType:"slide",
+                                                msg:"删除成功"
+                                            });
+                                        }else{
+                                            $.messager.show({
+                                                title:"删除提示",
+                                                showType:"slide",
+                                                msg:"删除失败"
+                                            });
+                                        }
+                                        //刷新datagrid
+                                        $("#dg").edatagrid("reload");
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    //$("#dg").edatagrid("destroyRow");
                 }
             },'-',{
                 iconCls: 'icon-save',
@@ -72,7 +108,7 @@
             view: detailview,
             detailFormatter: function(rowIndex, rowData){
                 return '<table><tr>' +
-                    '<td rowspan=2 style="border:0"><img src="${pageContext.request.contextPath}' + rowData.url + '" style="height:50px;"></td>' +
+                    '<td rowspan=2 style="border:0"><img src="${pageContext.request.contextPath}' + rowData.url + '" style="height:80px;"></td>' +
                     '<td style="border:0">' +
                     '<p>Attribute: ' + rowData.desc + '</p>' +
                     '<p>Date: ' + rowData.createDate + '</p>' +
