@@ -27,15 +27,21 @@
                 handler: function(){
                     var row = $('#chapter').treegrid("getSelected");
                     console.log(row);
-                    $("#albumDialog").dialog("open");
-                    $("#coverImg").prop("src","${pageContext.request.contextPath}"+row.coverImg);
-                    $("#name").val(row.name);
-                    $("#aucthor").val(row.aucthor);
-                    $("#broadCast").val(row.broadCast);
-                    $("#count").val(row.count);
-                    $("#score").val(row.score);
-                    $("#publishDate").val(row.publishDate);
-                    $("#brief").val(row.brief);
+                    if(row != null){
+                        if(row.url == null){
+                            $("#albumDialog").dialog("open");
+                            //form的load方法用于读取记录填充到表单中
+                            $("#albumForm").form("load",row);
+                            $("#coverImg").prop("src","${pageContext.request.contextPath}"+row.coverImg);
+                            /*$("#name").val(row.name);
+                            $("#aucthor").val(row.aucthor);
+                            $("#broadCast").val(row.broadCast);
+                            $("#count").val(row.count);
+                            $("#score").val(row.score);
+                            $("#publishDate").val(row.publishDate);
+                            $("#brief").val(row.brief);*/
+                        }
+                    }
                 }
             },'-',{
                 iconCls: 'icon-add',
@@ -47,20 +53,31 @@
                 iconCls: 'icon-add',
                 text:'添加章节',
                 handler: function(){
-                    $("#chapterAddDialog").dialog("open");
+                    var row = $('#chapter').treegrid("getSelected");
+                    if(row != null){
+                        if(row.url == null){
+                            $("#chapterAddDialog").dialog("open");
+                        }
+                    }else{
+                        alert("请选择需要添加章节的专辑");
+                        //doInsert2(row);
+                    }
+
                 }
             },'-',{
                 iconCls: 'icon-cut',
                 text:'下载音频',
                 handler: function(){
                     var row = $('#chapter').treegrid("getSelected");
-                    console.log(row.url);
-                    window.location.href="${pageContext.request.contextPath}/chapter/download.do?filename="+row.url;
-                    /*$.ajax({
+                    if(row != null){
+                        if(row.url != null){
+                            console.log(row.url);
+                            window.location.href="${pageContext.request.contextPath}/chapter/download.do?name="+row.name+"&filename="+row.url;
+                        }
+                    }else{
+                        alert("请选择需要下载的章节");
+                    }
 
-                        type:'post',
-                        data:{"filename":row.url}
-                    })*/
                 }
             }]
         });
@@ -85,6 +102,7 @@
             title:"章节添加对话框",
             width:500
         })
+        //音频播放框
         $("#audio").dialog({
             closed:true,
             //buttons:"#addSubmitBtn",
@@ -121,6 +139,7 @@
         console.log(row);
         $("#chapterform").form("submit",{
             url:"${pageContext.request.contextPath}/chapter/add.do",
+            //携带父节点id去请求
             queryParams:{"aid":row.id},
             success:function(data){
                 if(data == "true"){
@@ -150,13 +169,16 @@
 
 <!--专辑详情对话框-->
 <div id="albumDialog">
-    封面:<img id="coverImg" src="" alt="" height="15px" width="15px">标题:<input id="name"/><br/>
-    作者:<input id="aucthor"/><br/>
-    播音:<input id="broadCast"/><br/>
-    集数:<input id="count"/><br/>
-    评分:<input id="score"/><br/>
-    发布日期:<input id="publishDate"/><br/>
-    简介:<input type="textarea" name="" id="brief" cols="30" rows="30"></textarea><br/>
+    <form id="albumForm">
+        封面:<img id="coverImg" src="" alt="" height="20px" width="20px"><br>
+        标题:<input id="name" name="name"/><br/>
+        作者:<input id="aucthor" name="aucthor"/><br/>
+        播音:<input id="broadCast" name="broadCast"/><br/>
+        集数:<input id="count" name="count"/><br/>
+        评分:<input id="score" name="score"/><br/>
+        发布日期:<input id="publishDate" name="publishDate"/><br/>
+        简介:<input type="textarea" name="brief" id="brief" cols="30" rows="30"></textarea><br/>
+    </form>
 </div>
 
 <%--专辑添加对话框--%>
@@ -176,8 +198,8 @@
 <div id="chapterAddDialog">
     <form id="chapterform" method="post" enctype="multipart/form-data">
         标题:<input name="name"/><br/>
-        大小:<input name="size"/><br/>
-        时长:<input name="duration"/><br/>
+        <%--大小:<input name="size"/><br/>--%>
+        <%--时长:<input name="duration"/><br/>--%>
         url:<input type="file" name="multipartFile"/><br>
         <input type="button" onclick="doInsert2()" value="添加">
     </form>

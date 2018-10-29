@@ -57,7 +57,7 @@ public class BannerController {
             System.out.println(realpath);
             String oldFileName = multipartFile.getOriginalFilename();
             System.out.println(oldFileName);
-            //获取文件名后缀
+            //获取文件名后缀,没有点
             //FilenameUtils.getExtension(oldFileName);
             String filename = new Date().getTime()+"_"+oldFileName;
             File file = new File(realpath+"/"+filename);

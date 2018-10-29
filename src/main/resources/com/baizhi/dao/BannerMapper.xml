@@ -30,6 +30,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!--添加-->
 	<insert id="insert">
-		insert into banner values(0,#{title},#{url},#{desc},NOW(),"Y")
+		insert into banner values(0,#{title},#{url},#{desc},NOW(),#{status})
 	</insert>
 </mapper>

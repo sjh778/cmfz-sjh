@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 
+	namespace:写当前mapper文件对应的dao接口的全类名
+ -->
+<mapper namespace="com.baizhi.dao.UserDao">
+
+
+	<!--分页查询-->
+	<select id="selectAll" resultType="User">
+		select * from user LIMIT #{start},#{end}
+	</select>
+
+	<!--查询全部-->
+	<select id="selectAllUser" resultType="User">
+		select * from user
+	</select>
+
+	<!--查询数量-->
+	<select id="getCount" resultType="int">
+		select count(*) from user
+	</select>
+
+	<!--查询时间段内注册数量-->
+	<select id="selectCountByDate1" resultType="int">
+		select count(*) from user where datediff(now(),regDate) &lt; 7
+	</select>
+
+	<select id="selectCountByDate2" resultType="int">
+		select count(*) from user where datediff(now(),regDate) &lt; 14
+	</select>
+
+	<select id="selectCountByDate3" resultType="int">
+		select count(*) from user where datediff(now(),regDate) &lt; 21
+	</select>
+
+	<select id="selectCountByProvince1" resultType="UserDTO">
+		select count(*) value,province name from user where gender = 0 GROUP BY province
+	</select>
+
+	<select id="selectCountByProvince2" resultType="UserDTO">
+		select count(*) value,province name from user where gender = 1 GROUP BY province
+	</select>
+</mapper>

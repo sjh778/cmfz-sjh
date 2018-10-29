@@ -152,6 +152,10 @@
         标题:<input name="title"/><br/>
         密码:<input type="file" name="multipartFile"/><br/>
         描述:<input type="textarea" name="desc" id="" cols="30" rows="10"></textarea><br/>
+        状态:<select class="easyui-combobox" name="status" style="width:200px;">
+            <option value="Y">展示</option>
+            <option value="N">不展示</option>
+        </select><br>
         <input type="button" value="添加" onclick="doAdd()">
     </form>
 </div>

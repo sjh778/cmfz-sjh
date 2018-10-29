@@ -3,10 +3,7 @@ package com.baizhi.test;
 import com.baizhi.CmfzApp;
 import com.baizhi.dao.AdminDao;
 import com.baizhi.entity.Banner;
-import com.baizhi.service.AdminService;
-import com.baizhi.service.AlbumService;
-import com.baizhi.service.BannerService;
-import com.baizhi.service.MenuService;
+import com.baizhi.service.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +25,8 @@ public class AdminTest {
     BannerService bs;
     @Autowired
     AlbumService as;
+    @Autowired
+    UserService us;
     @Test
     public void test(){
         System.out.println(service.login("zhangsan","qwer"));
@@ -52,5 +51,12 @@ public class AdminTest {
     public void test5(){
         System.out.println(as.getAlbumTree());
     }
-
+    @Test
+    public void test6(){
+        System.out.println(us.selectAll(1,5));
+    }
+    @Test
+    public void test7(){
+        System.out.println(us.getdistribution());
+    }
 }
